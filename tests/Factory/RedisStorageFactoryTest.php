@@ -7,6 +7,7 @@ use Psr\Container\ContainerInterface;
 use Fet\LaminasRateLimiting\Factory\RedisStorageFactory;
 use Fet\LaminasRateLimiting\Storage\RedisStorage;
 use Mockery as m;
+use RedisException;
 
 class RedisStorageFactoryTest extends TestCase
 {
@@ -15,7 +16,8 @@ class RedisStorageFactoryTest extends TestCase
         m::close();
     }
 
-    public function testInvoke()
+    /** @test */
+    public function it_returns_a_redis_storage()
     {
         $container = m::mock(ContainerInterface::class);
 
@@ -25,7 +27,16 @@ class RedisStorageFactoryTest extends TestCase
             ->andReturn([]);
 
         $factory = new RedisStorageFactory();
-        $storage = $factory($container, RedisStorage::class);
+
+        try {
+            if (!extension_loaded('redis')) {
+                $this->markTestSkipped('The Redis extension is not installed.');
+            }
+
+            $storage = $factory($container, RedisStorage::class);
+        } catch (RedisException $e) {
+            $this->markTestSkipped('Redis connection could not be established: ' . $e->getMessage());
+        }
 
         $this->assertInstanceOf(RedisStorage::class, $storage);
     }
