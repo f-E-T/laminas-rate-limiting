@@ -7,6 +7,7 @@ use Fet\LaminasRateLimiting\Factory\RouteCheckerFactory;
 use Fet\LaminasRateLimiting\Listener\RateLimitListener;
 use Fet\LaminasRateLimiting\Service\RateLimiter;
 use Fet\LaminasRateLimiting\Service\RouteChecker;
+use Fet\LaminasRateLimiting\Storage\NullStorage;
 use Fet\LaminasRateLimiting\Storage\RedisStorage;
 
 return [
@@ -16,6 +17,9 @@ return [
             RateLimitListener::class => RateLimitListenerFactory::class,
             RedisStorage::class => RedisStorageFactory::class,
             RouteChecker::class => RouteCheckerFactory::class,
+        ],
+        'invokables' => [
+            NullStorage::class => NullStorage::class,
         ],
     ],
     'listeners' => [
