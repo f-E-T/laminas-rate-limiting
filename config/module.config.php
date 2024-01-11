@@ -22,6 +22,7 @@ return [
         RateLimitListener::class,
     ],
     'rate_limiting' => [
+        'enabled' => true,
         'max_requests' => 100,
         'window' => 60,
         'storage' => [

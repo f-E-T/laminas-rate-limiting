@@ -16,7 +16,8 @@ class RateLimiterFactory implements FactoryInterface
         $config = $container->get('config')['rate_limiting'];
         $storageServiceName = $config['storage']['name'] ?? self::DEFAULT_STORAGE;
         $storage = $container->get($storageServiceName);
+        $enabled = $config['enabled'] ?? true;
 
-        return new RateLimiter($storage, $config['max_requests'], $config['window']);
+        return new RateLimiter($storage, $config['max_requests'], $config['window'], $enabled);
     }
 }

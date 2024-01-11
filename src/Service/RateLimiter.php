@@ -9,16 +9,22 @@ class RateLimiter
     protected $storage;
     protected int $maxRequests;
     protected int $window;
+    protected bool $enabled;
 
-    public function __construct(StorageInterface $storage, int $maxRequests, int $window)
+    public function __construct(StorageInterface $storage, int $maxRequests, int $window, bool $enabled = true)
     {
         $this->storage = $storage;
         $this->maxRequests = $maxRequests;
         $this->window = $window;
+        $this->enabled = $enabled;
     }
 
     public function isAllowed(string $clientIdentifier): bool
     {
+        if ($this->enabled === false) {
+            return true;
+        }
+
         $key = 'ratelimit:' . $clientIdentifier;
         $current = $this->storage->get($key);
 
@@ -33,5 +39,10 @@ class RateLimiter
         }
 
         return true;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
     }
 }

@@ -25,6 +25,7 @@ Define your rate limiting rules in your `module.config.php` or global configurat
 ```php
 return [
     'rate_limiting' => [
+        'enabled' => true, // indicates whether rate limiting is enabled
         'max_requests' => 100, // max number of requests
         'window' => 60, // time window in seconds
         'routes' => [ // routes to apply rate limiting (wildcards allowed)

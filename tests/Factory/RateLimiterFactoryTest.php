@@ -73,4 +73,32 @@ class RateLimiterFactoryTest extends TestCase
 
         $this->assertInstanceOf(RateLimiter::class, $rateLimiter);
     }
+
+    /** @test */
+    public function it_can_disable_the_rate_limiter()
+    {
+        $config = [
+            'rate_limiting' => [
+                'enabled' => false,
+                'max_requests' => 100,
+                'window' => 60,
+            ]
+        ];
+
+        $container = m::mock(ContainerInterface::class);
+        $storageMock = m::mock(StorageInterface::class);
+
+        $container->shouldReceive('get')
+            ->with(RedisStorage::class)
+            ->andReturn($storageMock);
+
+        $container->shouldReceive('get')
+            ->with('config')
+            ->andReturn($config);
+
+        $factory = new RateLimiterFactory();
+        $rateLimiter = $factory($container, RateLimiter::class);
+
+        $this->assertFalse($rateLimiter->isEnabled());
+    }
 }

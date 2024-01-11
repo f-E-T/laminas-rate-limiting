@@ -35,6 +35,19 @@ class RateLimiterTest extends TestCase
     }
 
     /** @test */
+    public function it_returns_true_when_the_rate_limiter_is_disabled()
+    {
+        $rateLimiter = new RateLimiter($this->storage, 100, 60, false);
+
+        $this->storage
+            ->shouldReceive('get')
+            ->with('ratelimit:testClient')
+            ->andReturn(9999);
+
+        $this->assertTrue($rateLimiter->isAllowed('testClient'));
+    }
+
+    /** @test */
     public function it_returns_false_when_the_limit_is_reached()
     {
         $this->storage
