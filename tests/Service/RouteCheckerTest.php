@@ -60,6 +60,26 @@ class RouteCheckerTest extends TestCase
         $this->assertTrue($this->routeChecker->isCurrentRouteLimited());
     }
 
+    /** @test */
+    public function it_returns_true_if_all_routes_are_limited()
+    {
+        $config = [
+            'routes' => [
+                '*',
+            ],
+        ];
+
+        $event = m::mock(Application::class);
+        $event->shouldReceive('getMvcEvent')->andReturn($event);
+        $routeMatch = m::mock(RouteMatch::class);
+        $event->shouldReceive('getRouteMatch')->andReturn($routeMatch);
+
+        $routeChecker = new RouteChecker($event, $config);
+
+        $routeMatch->shouldReceive('getMatchedRouteName')->andReturn('foo');
+        $this->assertTrue($routeChecker->isCurrentRouteLimited());
+    }
+
     public static function wildcardProvider()
     {
         return [

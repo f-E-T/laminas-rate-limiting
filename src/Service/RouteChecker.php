@@ -26,6 +26,10 @@ class RouteChecker
         $currentRouteName = $routeMatch->getMatchedRouteName();
 
         foreach ($this->routes as $routePattern) {
+            if ($routePattern === '*') {
+                return true;
+            }
+
             $pattern = '/^' . preg_quote($routePattern, '/') . '$/';
 
             if (stripos($routePattern, '*') !== false) {

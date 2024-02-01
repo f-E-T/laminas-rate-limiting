@@ -37,6 +37,8 @@ return [
 ];
 ```
 
+> If you want to limit all routes, you can use a '*' as route name.
+
 # Storages
 As of the current release, this package exclusively supports **Redis** for backend storage.
 
