@@ -13,17 +13,17 @@ class RedisStorage implements StorageInterface
         $this->redis = $redis;
     }
 
-    public function get($identifier)
+    public function get(string $identifier): string|bool
     {
         return $this->redis->get($identifier);
     }
 
-    public function set($identifier, $value, $ttl)
+    public function set(string $identifier, string $value, int $ttl): bool
     {
         return $this->redis->setex($identifier, $ttl, $value);
     }
 
-    public function increment($identifier)
+    public function increment(string $identifier): int
     {
         return $this->redis->incr($identifier);
     }

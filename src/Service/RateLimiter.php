@@ -6,7 +6,7 @@ use Fet\LaminasRateLimiting\Storage\StorageInterface;
 
 class RateLimiter
 {
-    protected $storage;
+    protected StorageInterface $storage;
     protected int $maxRequests;
     protected int $window;
     protected bool $enabled;
@@ -35,7 +35,7 @@ class RateLimiter
 
             $this->storage->increment($key);
         } else {
-            $this->storage->set($key, 1, $this->window);
+            $this->storage->set($key, '1', $this->window);
         }
 
         return true;

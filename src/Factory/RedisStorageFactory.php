@@ -9,7 +9,7 @@ use Redis;
 
 class RedisStorageFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RedisStorage
     {
         $config = $container->get('config')['rate_limiting'] ?? [];
         $options = $config['storage']['options'] ?? [];

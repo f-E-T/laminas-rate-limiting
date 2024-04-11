@@ -50,6 +50,18 @@ class RouteCheckerTest extends TestCase
         $this->assertFalse($this->routeChecker->isCurrentRouteLimited());
     }
 
+    /** @test */
+    public function it_returns_false_if_route_is_not_found()
+    {
+        $event = m::mock(Application::class);
+        $event->shouldReceive('getMvcEvent')->andReturn($event);
+        $event->shouldReceive('getRouteMatch')->andReturn(false);
+
+        $this->routeChecker = new RouteChecker($event, []);
+
+        $this->assertFalse($this->routeChecker->isCurrentRouteLimited());
+    }
+
     /** 
      * @test
      * @dataProvider wildcardProvider 

@@ -4,9 +4,9 @@ namespace Fet\LaminasRateLimiting\Storage;
 
 interface StorageInterface
 {
-    public function get($key);
+    public function get(string $key): string|bool;
 
-    public function set($key, $value, $ttl);
+    public function set(string $key, string $value, int $ttl): bool;
 
-    public function increment($key);
+    public function increment(string $key): int;
 }

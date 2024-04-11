@@ -9,9 +9,9 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class RateLimiterFactory implements FactoryInterface
 {
-    const DEFAULT_STORAGE = RedisStorage::class;
+    public const DEFAULT_STORAGE = RedisStorage::class;
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RateLimiter
     {
         $config = $container->get('config')['rate_limiting'];
         $storageServiceName = $config['storage']['name'] ?? self::DEFAULT_STORAGE;

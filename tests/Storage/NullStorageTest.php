@@ -12,8 +12,8 @@ class NullStorageTest extends TestCase
     {
         $storage = new NullStorage();
 
-        $this->assertNull($storage->set('foo', 1, 1));
-        $this->assertNull($storage->increment('foo'));
-        $this->assertEquals(-1, $storage->get('foo'));
+        $this->assertTrue($storage->set('foo', '1', 1));
+        $this->assertEquals(-1, $storage->increment('foo'));
+        $this->assertFalse($storage->get('foo'));
     }
 }

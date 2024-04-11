@@ -9,7 +9,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class RouteCheckerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RouteChecker
     {
         $application = $container->get(Application::class);
         $config = $container->get('config')['rate_limiting'];

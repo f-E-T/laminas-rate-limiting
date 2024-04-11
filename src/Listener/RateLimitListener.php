@@ -8,11 +8,12 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\Http\PhpEnvironment\Response as HttpResponse;
 use Laminas\EventManager\AbstractListenerAggregate;
 use Laminas\EventManager\EventManagerInterface;
+use Laminas\Http\PhpEnvironment\Request;
 
 class RateLimitListener extends AbstractListenerAggregate
 {
-    protected $rateLimiter;
-    protected $routeChecker;
+    protected RateLimiter $rateLimiter;
+    protected RouteChecker $routeChecker;
 
     public function __construct(RateLimiter $rateLimiter, RouteChecker $routeChecker)
     {
@@ -25,13 +26,19 @@ class RateLimitListener extends AbstractListenerAggregate
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 100);
     }
 
-    public function onDispatch(MvcEvent $event)
+    public function onDispatch(MvcEvent $event): ?HttpResponse
     {
         if ($this->routeChecker->isCurrentRouteLimited() === false) {
-            return;
+            return null;
         }
 
-        $clientIdentifier = $event->getRequest()->getServer()->get('REMOTE_ADDR');
+        $request = $event->getRequest();
+
+        if (!$request instanceof Request) {
+            return null;
+        }
+
+        $clientIdentifier = $request->getServer()->get('REMOTE_ADDR');
 
         if (!$this->rateLimiter->isAllowed($clientIdentifier)) {
             $response = new HttpResponse();
@@ -40,5 +47,7 @@ class RateLimitListener extends AbstractListenerAggregate
 
             return $response;
         }
+
+        return null;
     }
 }
